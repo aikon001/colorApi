@@ -1,0 +1,32 @@
+syntax = "proto3";
+option go_package =  "gitlab.com/aikon001/color_api/colorapi";
+
+package colorapi;
+
+service Colors
+{
+    rpc PickAllColors(StartIndex) returns (stream ColorResponse) {}
+    rpc AddColorFromHexOrRgb(Color) returns (Reply) {}
+}
+
+message ColorResponse { 
+    Color color_resp = 1; 
+}
+
+message Reply
+{
+    string message = 1;
+}
+
+message Color 
+{
+    string name = 1;
+    string hex = 2;
+    fixed32 RGB = 3;
+}
+
+message StartIndex
+{
+    int32 index = 1;
+}
+
