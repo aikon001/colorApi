@@ -28,7 +28,6 @@ func (db Database) GetAllColors() (*models.ColorList, error) {
 
 func (db Database) AddColor(color *models.Color) error {
 	var id int
-	var createdAt string
 
 	query := `INSERT INTO colors (name, hexadecimal,R,G,B) VALUES ($1,$2,$3,$4,$5) RETURNING id, created_at`
 
