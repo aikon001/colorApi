@@ -15,7 +15,7 @@ type Color struct {
 }
 
 type ColorList struct {
-	Color []Colors `json:"colors"`
+	Colors []Color `json:"colors"`
 }
 
 func (c *Color) Bind(r *http.Request) error {
