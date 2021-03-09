@@ -1,4 +1,4 @@
-package color
+package models
 
 import (
 	"fmt"
@@ -15,7 +15,7 @@ type Color struct {
 }
 
 type ColorList struct {
-	Color []Color `json:"colors"`
+	Color []Colors `json:"colors"`
 }
 
 func (c *Color) Bind(r *http.Request) error {
