@@ -9,9 +9,10 @@ type Color struct {
 	ID          int    `json:"id"`
 	Name        string `json:"name"`
 	Hexadecimal string `json:"hexadecimal"`
-	R           int    `json:"r"`
-	G           int    `json:"g"`
-	B           int    `json:"b"`
+	R           int    `json:"R"`
+	G           int    `json:"G"`
+	B           int    `json:"B"`
+	CreatedAt   string `json:"created_at"`
 }
 
 type ColorList struct {
