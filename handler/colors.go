@@ -16,7 +16,7 @@ import (
 var colorIDKey = "colorID"
 
 func colors(router chi.Router) {
-	router.Get("/", GetAllColors)
+	router.Get("/", db.GetAllColors)
 	router.Post("/", createColor)
 	router.Route("/{colorID}", func(router chi.Router) {
 		router.Use(ItemContext)
