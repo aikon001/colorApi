@@ -10,7 +10,7 @@ import (
 
 func (db Database) GetAllColors() (*models.ColorList, error) {
 	list := &models.ColorList{}
-	rows, err := db.Conn.Query("SELECT * FROM colors ORDER BY id DESC")
+	rows, err := db.Conn.Query("SELECT * FROM colorapi_db.colors ORDER BY id DESC")
 	if err != nil {
 		return list, err
 	}
