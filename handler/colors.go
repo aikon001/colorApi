@@ -16,10 +16,10 @@ import (
 var colorIDKey = "colorID"
 
 func colors(router chi.Router) {
-	router.Get("/", db.GetAllColors)
+	router.Get("/", getAllColors)
 	router.Post("/", createColor)
 	router.Route("/{colorID}", func(router chi.Router) {
-		router.Use(ItemContext)
+		router.Use(ColorContext)
 		router.Get("/", getColor)
 		router.Put("/", updateColor)
 		router.Delete("/", deleteColor)
@@ -27,14 +27,14 @@ func colors(router chi.Router) {
 }
 func ColorContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		itemId := chi.URLParam(r, "itemId")
-		if itemId == "" {
-			render.Render(w, r, ErrorRenderer(fmt.Errorf("item ID is required")))
+		colorId := chi.URLParam(r, "colorId")
+		if colorId == "" {
+			render.Render(w, r, ErrorRenderer(fmt.Errorf("color ID is required")))
 			return
 		}
-		id, err := strconv.Atoi(itemId)
+		id, err := strconv.Atoi(colorId)
 		if err != nil {
-			render.Render(w, r, ErrorRenderer(fmt.Errorf("invalid item ID")))
+			render.Render(w, r, ErrorRenderer(fmt.Errorf("invalid color ID")))
 		}
 		ctx := context.WithValue(r.Context(), colorIDKey, id)
 		next.ServeHTTP(w, r.WithContext(ctx))
@@ -58,7 +58,7 @@ func createColor(w http.ResponseWriter, r *http.Request) {
 }
 
 func getAllColors(w http.ResponseWriter, r *http.Request) {
-	colors, err := dbInstance.GetAllItems()
+	colors, err := dbInstance.GetAllColors()
 	if err != nil {
 		render.Render(w, r, ServerErrorRenderer(err))
 		return
@@ -70,7 +70,7 @@ func getAllColors(w http.ResponseWriter, r *http.Request) {
 
 func getColor(w http.ResponseWriter, r *http.Request) {
 	colorID := r.Context().Value(colorDKey).(int)
-	color, err := dbInstance.GetItemById(itemID)
+	color, err := dbInstance.GetColorById(colorID)
 	if err != nil {
 		if err == db.ErrNoMatch {
 			render.Render(w, r, ErrNotFound)
@@ -85,9 +85,9 @@ func getColor(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func deleteItem(w http.ResponseWriter, r *http.Request) {
-	itemId := r.Context().Value(itemIDKey).(int)
-	err := dbInstance.DeleteItem(itemId)
+func deleteColor(w http.ResponseWriter, r *http.Request) {
+	colorId := r.Context().Value(colorIDKey).(int)
+	err := dbInstance.DeleteColor(colorId)
 	if err != nil {
 		if err == db.ErrNoMatch {
 			render.Render(w, r, ErrNotFound)
@@ -97,14 +97,14 @@ func deleteItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-func updateItem(w http.ResponseWriter, r *http.Request) {
-	itemId := r.Context().Value(itemIDKey).(int)
-	itemData := models.Item{}
-	if err := render.Bind(r, &itemData); err != nil {
+func updateColor(w http.ResponseWriter, r *http.Request) {
+	colorId := r.Context().Value(colorIDKey).(int)
+	colorData := models.Color{}
+	if err := render.Bind(r, &colorData); err != nil {
 		render.Render(w, r, ErrBadRequest)
 		return
 	}
-	item, err := dbInstance.UpdateItem(itemId, itemData)
+	color, err := dbInstance.UpdateItem(colorId, colorData)
 	if err != nil {
 		if err == db.ErrNoMatch {
 			render.Render(w, r, ErrNotFound)
@@ -113,7 +113,7 @@ func updateItem(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	if err := render.Render(w, r, &item); err != nil {
+	if err := render.Render(w, r, &color); err != nil {
 		render.Render(w, r, ServerErrorRenderer(err))
 		return
 	}
