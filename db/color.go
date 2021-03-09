@@ -50,7 +50,6 @@ func (db Database) AddColor(color *models.Color) error {
 		return errors.New("No hexadecimal provided [Neither RGB provided!]")
 	}
 	color.ID = id
-	color.CreatedAt = createdAt
 	return nil
 
 }
@@ -72,7 +71,7 @@ func (db Database) DeleteColor(colorId int) error {
 func (db Database) UpdateColor(colorId int, colorData models.Color) (models.Color, error) {
 	color := models.Color{}
 	query := `UPDATE colors SET name=$1, hexadecimal=$2, R=$3, G=$4, B=$5 WHERE id=$6 RETURNING id, name, hexadecimal,R,G,B, created_at;`
-	err := db.Conn.QueryRow(query, colorData.Name, colorData.Hexadecimal, colorData.R, colorData.G, colorData.B, colorData.ID).Scan(&color.ID, &color.Name, &color.Description, &color.CreatedAt)
+	err := db.Conn.QueryRow(query, colorData.Name, colorData.Hexadecimal, colorData.R, colorData.G, colorData.B, colorData.ID).Scan(&color.ID, &color.Name, &color.Hexadecimal, &color.R, &color.G, &color.B)
 	if err != nil {
 		return color, err
 	}
