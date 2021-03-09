@@ -3,9 +3,9 @@ package handler
 import (
 	"net/http"
 
+	"github.com/aikon001/colorapiserver/db"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
-	"gitlab.com/aikon001/colorapiserver/db"
 )
 
 var dbInstance db.Database
