@@ -12,7 +12,7 @@ import (
 	"os"
 	"unsafe"
 
-	library "github.com/aikon001/color-api/colorapi"
+	library "github.com/aikon001/colorapiserver/colorapi"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/grpclog"
@@ -155,4 +155,5 @@ func main() {
 			grpclog.Fatalf("failed starting http server: %v", err)
 		}
 	}
+
 }

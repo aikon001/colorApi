@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - "9091:9091"
+  echo-server:
+    image: 
+        "ealen/echo-server"
+  nginx:
+    image:
+        "nginx"
+  closure-client:
+    image:
+        "closure-client"
