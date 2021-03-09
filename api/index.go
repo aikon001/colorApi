@@ -15,7 +15,7 @@ import (
 	"github.com/aikon001/colorapiserver/handler"
 )
 
-func main() {
+func Main(w http.ResponseWriter, r *http.Request) {
 	addr := ":8080"
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
