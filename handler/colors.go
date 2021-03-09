@@ -69,7 +69,7 @@ func getAllColors(w http.ResponseWriter, r *http.Request) {
 }
 
 func getColor(w http.ResponseWriter, r *http.Request) {
-	colorID := r.Context().Value(colorDKey).(int)
+	colorID := r.Context().Value(colorIDKey).(int)
 	color, err := dbInstance.GetColorById(colorID)
 	if err != nil {
 		if err == db.ErrNoMatch {
@@ -104,7 +104,7 @@ func updateColor(w http.ResponseWriter, r *http.Request) {
 		render.Render(w, r, ErrBadRequest)
 		return
 	}
-	color, err := dbInstance.UpdateItem(colorId, colorData)
+	color, err := dbInstance.UpdateColor(colorId, colorData)
 	if err != nil {
 		if err == db.ErrNoMatch {
 			render.Render(w, r, ErrNotFound)
