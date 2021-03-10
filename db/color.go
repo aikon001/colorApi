@@ -26,7 +26,10 @@ func (db Database) GetAllColors() (*models.ColorList, error) {
 	return list, nil
 }
 
-func checkColorAndQuery(db *Database, color models.Color, query string) error {
+func (db Database) AddColor(color *models.Color) error {
+	var id int
+
+	query := `INSERT INTO colors (name, hexadecimal,r,g,b) VALUES ($1,$2,$3,$4,$5) RETURNING id`
 
 	if len(color.Hexadecimal) != 0 {
 		byt, _ := hex.DecodeString(color.Hexadecimal)
@@ -45,18 +48,6 @@ func checkColorAndQuery(db *Database, color models.Color, query string) error {
 
 	} else {
 		return errors.New("No hexadecimal provided [Neither RGB provided!]")
-	}
-	return nil
-}
-
-func (db Database) AddColor(color *models.Color) error {
-	var id int
-
-	query := `INSERT INTO colors (name, hexadecimal,r,g,b) VALUES ($1,$2,$3,$4,$5) RETURNING id`
-	err := checkColorAndQuery(&db, *color, query)
-
-	if err != nil {
-		return err
 	}
 	color.ID = id
 	return nil
@@ -77,13 +68,24 @@ func (db Database) DeleteColor(colorId int) error {
 	return err
 }
 
-func (db Database) UpdateColor(colorId int, colorData models.Color) (models.Color, error) {
+func (db Database) UpdateColor(colorId int, colorData models.Color) error {
 	color := models.Color{}
-	query := `UPDATE colors SET name=$1, hexadecimal=$2 WHERE id=$6 RETURNING id, name, hexadecimal,R,G,B`
-	err := checkColorAndQuery(&db, color, query)
-
-	if err != nil {
-		return color, err
+	query := `UPDATE colors SET name=$1, hexadecimal=$2, r=$3, g=$4, b=$5 WHERE id=$6 RETURNING id, name, hexadecimal,R,G,B`
+	if len(color.Hexadecimal) != 0 {
+		byt, _ := hex.DecodeString(color.Hexadecimal)
+		err := db.Conn.QueryRow(query, color.Name, color.Hexadecimal, byt[0], byt[1], byt[2]).Scan(&color.ID, &color.Name, &color.Hexadecimal, &color.R, &color.G, &color.B)
+		if err != nil {
+			return err
+		}
+	} else if unsafe.Sizeof(color.R)+unsafe.Sizeof(color.G)+unsafe.Sizeof(color.B) != 0 {
+		rgb := []byte{byte(color.R), byte(color.G), byte(color.B)}
+		hexadecimal := hex.EncodeToString(rgb)
+		err := db.Conn.QueryRow(query, color.Name, hexadecimal, color.R, color.G, color.B).Scan(&color.ID, &color.Name, &color.Hexadecimal, &color.R, &color.G, &color.B)
+		if err != nil {
+			return err
+		}
+	} else {
+		return errors.New("No hexadecimal provided [Neither RGB provided!]")
 	}
-	return color, nil
+	return nil
 }
