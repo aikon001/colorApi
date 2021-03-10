@@ -16,7 +16,7 @@ func (db Database) GetAllColors() (*models.ColorList, error) {
 	}
 	for rows.Next() {
 		var color models.Color
-		err := rows.Scan(&color.ID, &color.Name, &color.Hexadecimal, &color.R, &color.G, &color.B)
+		err := rows.Scan(&color.ID, &color.Name, &color.Hexadecimal, &color.R, &color.G, &color.B, &color.CreatedAt)
 		if err != nil {
 			return list, err
 		}
@@ -26,10 +26,7 @@ func (db Database) GetAllColors() (*models.ColorList, error) {
 	return list, nil
 }
 
-func (db Database) AddColor(color *models.Color) error {
-	var id int
-
-	query := `INSERT INTO colors (name, hexadecimal,R,G,B) VALUES ($1,$2,$3,$4,$5) RETURNING id`
+func checkColorAndQuery(db *Database, color models.Color, query string) error {
 
 	if len(color.Hexadecimal) != 0 {
 		byt, _ := hex.DecodeString(color.Hexadecimal)
@@ -39,14 +36,27 @@ func (db Database) AddColor(color *models.Color) error {
 		}
 
 	} else if unsafe.Sizeof(color.R)+unsafe.Sizeof(color.G)+unsafe.Sizeof(color.B) != 0 {
-		rgb := (*[3]byte)(unsafe.Pointer(&color.R))[:]
-		err := db.Conn.QueryRow(query, color.Name, color.Hexadecimal, rgb[2], rgb[1], rgb[0]).Scan(&id)
+		rgb := []byte{byte(color.R), byte(color.G), byte(color.B)}
+		hexadecimal := hex.EncodeToString(rgb)
+		err := db.Conn.QueryRow(query, color.Name, hexadecimal, color.R, color.G, color.B).Scan(&id)
 		if err != nil {
 			return err
 		}
 
 	} else {
 		return errors.New("No hexadecimal provided [Neither RGB provided!]")
+	}
+	return nil
+}
+
+func (db Database) AddColor(color *models.Color) error {
+	var id int
+
+	query := `INSERT INTO colors (name, hexadecimal,r,g,b) VALUES ($1,$2,$3,$4,$5) RETURNING id`
+	err := checkColorAndQuery(&db, *color, query)
+
+	if err != nil {
+		return err
 	}
 	color.ID = id
 	return nil
@@ -57,7 +67,7 @@ func (db Database) GetColorById(colorId int) (models.Color, error) {
 	color := models.Color{}
 	query := `SELECT * FROM colors WHERE id = $1;`
 	row := db.Conn.QueryRow(query, colorId)
-	err := row.Scan(&color.ID, &color.Name, &color.Hexadecimal, &color.R, &color.G, &color.B)
+	err := row.Scan(&color.ID, &color.Name, &color.Hexadecimal, &color.R, &color.G, &color.B, &color.CreatedAt)
 	return color, err
 }
 
@@ -69,8 +79,9 @@ func (db Database) DeleteColor(colorId int) error {
 
 func (db Database) UpdateColor(colorId int, colorData models.Color) (models.Color, error) {
 	color := models.Color{}
-	query := `UPDATE colors SET name=$1, hexadecimal=$2, R=$3, G=$4, B=$5 WHERE id=$6 RETURNING id, name, hexadecimal,R,G,B`
-	err := db.Conn.QueryRow(query, colorData.Name, colorData.Hexadecimal, colorData.R, colorData.G, colorData.B, colorData.ID).Scan(&color.ID, &color.Name, &color.Hexadecimal, &color.R, &color.G, &color.B)
+	query := `UPDATE colors SET name=$1, hexadecimal=$2 WHERE id=$6 RETURNING id, name, hexadecimal,R,G,B`
+	err := checkColorAndQuery(&db, color, query)
+
 	if err != nil {
 		return color, err
 	}

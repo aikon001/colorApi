@@ -27,7 +27,7 @@ func colors(router chi.Router) {
 }
 func ColorContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		colorId := chi.URLParam(r, "colorId")
+		colorId := chi.URLParam(r, "colorID")
 		if colorId == "" {
 			render.Render(w, r, ErrorRenderer(fmt.Errorf("color ID is required")))
 			return

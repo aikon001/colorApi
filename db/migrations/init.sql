@@ -5,5 +5,4 @@ hexadecimal text,
 R int,
 G int,
 B int,
-created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
