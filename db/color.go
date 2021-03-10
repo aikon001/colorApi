@@ -68,24 +68,24 @@ func (db Database) DeleteColor(colorId int) error {
 	return err
 }
 
-func (db Database) UpdateColor(colorId int, colorData models.Color) error {
+func (db Database) UpdateColor(colorId int, colorData models.Color) (models.Color, error) {
 	color := models.Color{}
 	query := `UPDATE colors SET name=$1, hexadecimal=$2, r=$3, g=$4, b=$5 WHERE id=$6 RETURNING id, name, hexadecimal,R,G,B`
 	if len(color.Hexadecimal) != 0 {
 		byt, _ := hex.DecodeString(color.Hexadecimal)
 		err := db.Conn.QueryRow(query, color.Name, color.Hexadecimal, byt[0], byt[1], byt[2]).Scan(&color.ID, &color.Name, &color.Hexadecimal, &color.R, &color.G, &color.B)
 		if err != nil {
-			return err
+			return color, err
 		}
 	} else if unsafe.Sizeof(color.R)+unsafe.Sizeof(color.G)+unsafe.Sizeof(color.B) != 0 {
 		rgb := []byte{byte(color.R), byte(color.G), byte(color.B)}
 		hexadecimal := hex.EncodeToString(rgb)
 		err := db.Conn.QueryRow(query, color.Name, hexadecimal, color.R, color.G, color.B).Scan(&color.ID, &color.Name, &color.Hexadecimal, &color.R, &color.G, &color.B)
 		if err != nil {
-			return err
+			return color, err
+		} else {
+			return color, errors.New("No hexadecimal provided [Neither RGB provided!]")
 		}
-	} else {
-		return errors.New("No hexadecimal provided [Neither RGB provided!]")
 	}
-	return nil
+	return color, nil
 }
