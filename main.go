@@ -33,6 +33,7 @@ func main() {
 	defer database.Conn.Close()
 
 	httpHandler := handler.NewHandler(database)
+
 	server := &http.Server{
 		Handler: httpHandler,
 	}
