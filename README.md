@@ -1,7 +1,7 @@
 ## Basic Starter
-Basic Bluemix Starter
+The Api for colors
 
-[![](https://img.shields.io/badge/bluemix-powered-blue.svg)](https://bluemix.net) [![Build Status](https://travis.ibm.com/Liz-Furlan/starter-basic.svg?token=mRtpopMofh1kN3mEA6W5&branch=master)](https://travis.ibm.com/Liz-Furlan/starter-basic)
+[![Build Status](https://travis.ibm.com/Liz-Furlan/starter-basic.svg?token=mRtpopMofh1kN3mEA6W5&branch=master)](https://travis.ibm.com/Liz-Furlan/starter-basic)
 
 ### Table of Contents
 * [Summary](#summary)
@@ -9,7 +9,7 @@ Basic Bluemix Starter
 * [License](#license)
 
 ### Summary
-The Basic Bluemix Starter is an empty project, without any actual code, with only the files needed to "bluemixify" an existing project.
+---TODO
 
 ### Platforms
 | Maintainer | Email | Platform | Register | Generator |
