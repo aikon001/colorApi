@@ -1,7 +1,7 @@
 ## Colors Api
 The Api for colors
 
-[![Build Status](https://travis.ibm.com/Liz-Furlan/starter-basic.svg?token=mRtpopMofh1kN3mEA6W5&branch=master)](https://travis.ibm.com/Liz-Furlan/starter-basic)
+[![Build Status]()]()
 
 ### Table of Contents
 * [Summary](#summary)
@@ -12,8 +12,8 @@ The Api for colors
 ---TODO
 
 ### Platforms
-| Maintainer | Email | Platform | Register | Generator |
-| ---------- | ----- | -------- | -------- | --------- |
+| Maintainer | Email | Platform | Register          | Generator |
+| @aikon001  | ----- | Docker   | aikon001/colorApi | --------- |
 
 ### License
 This package contains code licensed under the Apache License, Version 2.0 (the "License"). You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 and may also view the License in the LICENSE file within this package.
