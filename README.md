@@ -4,7 +4,7 @@ The Api for colors
 [![Build Status](https://travis.ibm.com/Liz-Furlan/starter-basic.svg?token=mRtpopMofh1kN3mEA6W5&branch=master)]()
 
 ## Summary
-This is the Api for colors! 🎨
+This is the Api for colors! 🎨 <br/>
 Written in Go ..
 
 ## Platforms
@@ -15,7 +15,7 @@ Written in Go ..
 ## Build
 ### Through docker
 Build and run in local
-```shell
+```bash
 docker-compose up --build aikon001/colorApi
 ```
 ### From source
