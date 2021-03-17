@@ -15,7 +15,7 @@ Written in Go ..
 ## Build
 ### Through docker
 Build and run in local
-```bash
+```shell
 docker-compose up --build aikon001/colorApi
 ```
 ### From source
