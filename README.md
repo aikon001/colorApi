@@ -20,7 +20,7 @@ docker run aikon001/colorApi
 ```
 Or with docker compose 
 ```bash
-docker-compose up --build aikon001/colorApi
+docker-compose up --build
 ```
 ### From source
 Run with Go
