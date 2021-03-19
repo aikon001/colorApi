@@ -14,7 +14,11 @@ Written in Go ..
 
 ## Build
 ### Through docker
-Build and run in local
+Run in local
+```bash
+docker run aikon001/colorApi
+```
+Or with docker compose 
 ```bash
 docker-compose up --build aikon001/colorApi
 ```
