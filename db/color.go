@@ -69,7 +69,7 @@ func (db Database) UpdateColor(colorId int, colorData models.Color) (models.Colo
 	query := `UPDATE colors SET name=$1, hexadecimal=$2, r=$3, g=$4, b=$5 WHERE id=$6 RETURNING id, name, hexadecimal,R,G,B`
 	if len(color.Hexadecimal) != 0 {
 		byt, _ := hex.DecodeString(color.Hexadecimal)
-		err := db.Conn.QueryRow(query, color.Name, color.Hexadecimal, byt[0], byt[1], byt[2], color.ID).Scan(&color.ID, &color.Name, &color.Hexadecimal, &color.R, &color.G, &color.B)
+		err := db.Conn.QueryRow(query, color.Name, color.Hexadecimal, byt[0], byt[1], byt[2], color.ID).Scan(&color.Name, &color.Hexadecimal, &color.R, &color.G, &color.B, &color.ID)
 		if err != nil {
 			return color, err
 		}
