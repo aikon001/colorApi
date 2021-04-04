@@ -1,8 +1,6 @@
 ## Colors Api
 The Api for colors 
 
-[![Build Status](https://travis.ibm.com/Liz-Furlan/starter-basic.svg?token=mRtpopMofh1kN3mEA6W5&branch=master)]()
-
 ## Summary
 This is the Api for colors! 🎨 <br/>
 Written in Go ..
